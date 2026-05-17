@@ -13,18 +13,52 @@ MODEL_NAME = "all-MiniLM-L6-v2"
 
 def catalog_item_to_text(item):
 
-    parts = [
-        item.get("name", ""),
-        item.get("description", ""),
-        item.get("test_type", ""),
-        " ".join(item.get("keys", [])),
-        " ".join(item.get("job_levels", [])),
-        " ".join(item.get("languages", [])),
-        item.get("remote", ""),
-        item.get("adaptive", "")
+    name = item.get("name", "")
+    description = item.get("description", "")
+    test_type = item.get("test_type", "")
+
+    keys = " ".join(
+        item.get("keys", [])
+    )
+
+    job_levels = " ".join(
+        item.get("job_levels", [])
+    )
+
+    languages = " ".join(
+        item.get("languages", [])
+    )
+
+    text_parts = [
+        name,
+        name,  # repeated intentionally
+        description,
+        keys,
+        keys,  # repeated intentionally
+        job_levels,
+        test_type,
+        languages,
     ]
 
-    return " ".join(parts)
+    # --------------------------------
+    # Semantic enrichment for OPQ
+    # --------------------------------
+
+    if "opq" in name.lower():
+
+        text_parts.extend([
+            "personality assessment",
+            "behavioral assessment",
+            "workplace behavior",
+            "leadership style",
+            "influencing style",
+            "executive personality",
+            "strategic leadership",
+            "leadership benchmarking",
+            "candidate selection"
+        ])
+
+    return " ".join(text_parts)
 
 
 def main():
@@ -54,10 +88,11 @@ def main():
         embeddings,
         dtype=np.float32
     )
+    faiss.normalize_L2(embeddings)
 
     dimension = embeddings.shape[1]
 
-    index = faiss.IndexFlatL2(dimension)
+    index = faiss.IndexFlatIP(dimension)
 
     index.add(embeddings)
 

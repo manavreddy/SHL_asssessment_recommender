@@ -7,7 +7,6 @@ from core.orchestrator import orchestrate
 
 app = FastAPI(title="SHL Assessment Recommender")
 
-
 class ChatRequest(BaseModel):
     messages: List[Dict[str, str]]
 
