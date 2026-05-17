@@ -1,3 +1,12 @@
+---
+title: SHL Assessment Recommender
+emoji: rocket
+colorFrom: blue
+colorTo: indigo
+sdk: docker
+pinned: false
+---
+
 # SHL Assessment Recommender
 
 Simple v1 FastAPI service for the SHL AI Intern assignment.
@@ -6,8 +15,8 @@ Simple v1 FastAPI service for the SHL AI Intern assignment.
 
 ```bash
 pip install -r requirements.txt
-python build_index.py
-uvicorn app.main:app --reload
+python build_vector_db.py
+uvicorn main:app --reload
 ```
 
 ## Endpoints
