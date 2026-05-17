@@ -11,7 +11,7 @@ from sentence_transformers import SentenceTransformer
 
 MODEL_NAME = "all-MiniLM-L6-v2"
 
-_embedding_model = SentenceTransformer(MODEL_NAME)
+_embedding_model = None
 
 _faiss_index = None
 _catalog = None
@@ -46,7 +46,12 @@ def retrieve_assessments(
     top_k: int = 10
 ) -> List[Dict]:
 
+    global _embedding_model
+
     index, catalog = load_vector_database()
+
+    if _embedding_model is None:
+        _embedding_model = SentenceTransformer(MODEL_NAME)
 
     model = _embedding_model
 
